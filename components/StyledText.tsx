@@ -1,5 +1,13 @@
-import { Text, TextProps } from "./Themed";
+import { TextProps as RNTextProps, Text } from "react-native";
 
-export const MonoText = (props: TextProps) => (
-  <Text {...props} style={[props.style, { fontFamily: "SpaceMono" }]} />
-);
+import { TextProps } from "./ThemedText";
+
+export const MonoText = (props: TextProps) => {
+  const { style, ...rest } = props;
+  return (
+    <Text
+      {...(rest as RNTextProps)}
+      style={[style, { fontFamily: "SpaceMono" }]}
+    />
+  );
+};

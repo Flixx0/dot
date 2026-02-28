@@ -1,7 +1,9 @@
 import { useColorScheme } from "@/components/useColorScheme";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { ThemeProvider } from "@react-navigation/native";
+
+import { AppTheme } from "@/theme";
 import { Tabs } from "expo-router";
 import type { ComponentProps } from "react";
 import { useCallback } from "react";
@@ -16,16 +18,17 @@ const TabBarIcon = (props: {
 
 const TabLayoutAndroid = () => {
   const colorScheme = useColorScheme();
-  const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
   const colors = Colors[colorScheme ?? "light"];
 
-  const renderTabBar = useCallback((props: BottomTabBarProps) => (
-    <FloatingTabBar {...props} />
-  ), []);
+  const renderTabBar = useCallback(
+    (props: BottomTabBarProps) => <FloatingTabBar {...props} />,
+    []
+  );
 
   return (
-    <ThemeProvider value={theme}>
+    <ThemeProvider value={AppTheme}>
       <Tabs
+        initialRouteName="home"
         tabBar={renderTabBar}
         screenOptions={{
           headerShown: false,
@@ -39,13 +42,12 @@ const TabLayoutAndroid = () => {
           },
         }}
       >
+        <Tabs.Screen name="index" options={{ href: null }} />
         <Tabs.Screen
-          name="index"
+          name="home"
           options={{
             title: "Tab One",
-            tabBarIcon: ({ color }) => (
-              <TabBarIcon name="home" color={color} />
-            ),
+            tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           }}
         />
         <Tabs.Screen

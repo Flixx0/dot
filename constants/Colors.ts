@@ -1,19 +1,30 @@
-const tintColorLight = "#2f95dc";
-const tintColorDark = "#fff";
+/**
+ * Palette de couleurs (noms lisibles).
+ * Utilisée par le thème, useThemeColor et la tab bar.
+ */
+export const orange = "#d9563a";
+export const offWhite = "#F8F8F8";
+export const white = "#FFFFFF";
+export const darkGray = "#333333";
+export const lightGray = "#D3D3D3";
+export const gray = "#999999";
+export const black = "#0C0C0C";
 
 export default {
   light: {
-    text: "#000",
-    background: "#fff",
-    tint: tintColorLight,
-    tabIconDefault: "#ccc",
-    tabIconSelected: tintColorLight,
+    text: darkGray,
+    background: offWhite,
+    tint: orange,
+    tabIconDefault: gray,
+    tabIconSelected: orange,
+    black,
   },
   dark: {
-    text: "#fff",
-    background: "#000",
-    tint: tintColorDark,
-    tabIconDefault: "#ccc",
-    tabIconSelected: tintColorDark,
+    text: white,
+    background: black,
+    tint: orange,
+    tabIconDefault: gray,
+    tabIconSelected: orange,
+    black,
   },
 };
