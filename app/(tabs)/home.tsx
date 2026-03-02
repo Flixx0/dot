@@ -1,7 +1,8 @@
-import { StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HorizontalCalendar } from "@/components/HorizontalCalendar";
+import { RemiderRow, Reminder } from "@/components/RemiderRow";
 import type { AppThemeColors } from "@/theme";
 import { useTheme } from "@react-navigation/native";
 import { useCallback, useEffect, useRef } from "react";
@@ -14,10 +15,69 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
+const reminderList: Reminder[] = [
+  {
+    id: 1,
+    title: "Reminder 1",
+    description: "Description 1",
+    date: new Date().toISOString(),
+    duration: 30,
+  },
+  {
+    id: 2,
+    title: "Reminder 2",
+    description: "Description 2",
+    date: new Date().toISOString(),
+  },
+  {
+    id: 3,
+    title: "Reminder 3",
+    description: "Description 3",
+    date: new Date().toISOString(),
+  },
+  {
+    id: 4,
+    title: "Reminder 4",
+    description: "Description 4",
+    date: new Date().toISOString(),
+  },
+  {
+    id: 5,
+    title: "Reminder 5",
+    description: "Description 5",
+    date: new Date().toISOString(),
+  },
+
+  {
+    id: 6,
+    title: "Reminder 6",
+    description: "Description 6",
+    date: new Date().toISOString(),
+  },
+  {
+    id: 7,
+    title: "Reminder 7",
+    description: "Description 7",
+    date: new Date().toISOString(),
+  },
+  {
+    id: 8,
+    title: "Reminder 8",
+    description: "Description 8",
+    date: new Date().toISOString(),
+    location: {
+      latitude: 48.8566,
+      longitude: 2.3522,
+      address: "Paris, France",
+      radiusMeters: 100,
+    },
+  },
+];
+
 const HomeScreen = () => {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const scrollRef = useRef<Animated.ScrollView>(null);
+  const scrollRef = useRef<FlatList<Reminder>>(null);
 
   const scrollY = useSharedValue(0);
   const safeAreaTop = useSharedValue(0);
@@ -59,11 +119,17 @@ const HomeScreen = () => {
     isHeaderReduced.value = event.contentOffset.y >= 90;
   });
 
-  const scrollEndDragHandler = useCallback(() => {
-    if (scrollY.value < 90 && scrollY.value > 0) {
-      scrollRef.current?.scrollTo({ y: 90, animated: true });
-    }
-  }, [scrollRef, scrollY]);
+  const scrollEndDragHandler = useCallback(
+    (event: { nativeEvent: { contentOffset: { y: number } } }) => {
+      const y = event.nativeEvent.contentOffset.y;
+      if (y >= 90 / 2 && y > 0 && y <= 90) {
+        scrollRef.current?.scrollToOffset({ offset: 90, animated: true });
+      } else if (y < 90 / 2 && y > 0) {
+        scrollRef.current?.scrollToOffset({ offset: 0, animated: true });
+      }
+    },
+    [scrollRef]
+  );
 
   return (
     <View
@@ -92,24 +158,20 @@ const HomeScreen = () => {
           isHeaderReduced={isHeaderReduced}
         />
       </Animated.View>
-      <Animated.ScrollView
+      <Animated.FlatList<Reminder>
         ref={scrollRef}
+        data={reminderList}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <RemiderRow reminder={item} />}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         onScrollEndDrag={scrollEndDragHandler}
-        style={{ flex: 1, gap: 50, paddingTop: 200 + insets.top }}
-      >
-        {[1, 2, 3, 4].map((item) => (
-          <View
-            key={item}
-            style={{
-              backgroundColor: colors.card,
-              height: 100,
-              marginBottom: 500,
-            }}
-          ></View>
-        ))}
-      </Animated.ScrollView>
+        style={styles.list}
+        contentContainerStyle={[
+          styles.listContent,
+          { paddingTop: 200 + insets.top },
+        ]}
+      />
     </View>
   );
 };
@@ -119,6 +181,13 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    gap: 8,
+    paddingBottom: 100,
   },
   item: {
     height: 100,

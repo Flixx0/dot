@@ -2,7 +2,7 @@
  * Text with theme color and font (Nunito).
  */
 
-import { useTheme } from "@react-navigation/native";
+import { Theme, useTheme } from "@react-navigation/native";
 import {
   Text as DefaultText,
   TextProps as DefaultTextProps,
@@ -10,7 +10,7 @@ import {
 
 import { useThemeColor } from "./useThemeColor";
 
-type FontWeight = "regular" | "medium" | "bold" | "heavy";
+type FontWeight = "regular" | "medium" | "bold" | "heavy" | "extraBold";
 
 type ThemeProps = {
   lightColor?: string;
@@ -33,7 +33,8 @@ export const ThemedText = (props: TextProps) => {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
   const theme = useTheme();
   const fontFamily =
-    theme?.fonts?.[weight]?.fontFamily ?? theme?.fonts?.regular?.fontFamily;
+    theme?.fonts?.[weight as keyof Theme["fonts"]]?.fontFamily ??
+    theme?.fonts?.regular?.fontFamily;
   return (
     <DefaultText
       style={[

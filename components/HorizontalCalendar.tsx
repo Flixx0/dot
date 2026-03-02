@@ -253,12 +253,16 @@ const styles = StyleSheet.create({
   dayLabel: {
     textTransform: "capitalize",
     fontSize: 32,
+    fontWeight: "800",
+    fontFamily: "Nunito_800ExtraBold",
     paddingTop: 8,
     paddingBottom: 4,
   },
   monthLabel: {
     textTransform: "capitalize",
     fontSize: 32,
+    fontWeight: "800",
+    fontFamily: "Nunito_800ExtraBold",
     paddingTop: 8,
     paddingBottom: 4,
   },

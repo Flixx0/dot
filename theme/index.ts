@@ -35,26 +35,35 @@ const themeColors = {
 /** Couleurs du thème (noms des constantes + clés RN). Pour typer useTheme().colors. */
 export type AppThemeColors = typeof themeColors;
 
+const appFonts = {
+  regular: {
+    fontFamily: "Nunito_400Regular",
+    fontWeight: "400",
+  },
+  medium: {
+    fontFamily: "Nunito_500Medium",
+    fontWeight: "500",
+  },
+  bold: {
+    fontFamily: "Nunito_700Bold",
+    fontWeight: "700",
+  },
+  extraBold: {
+    fontFamily: "Nunito_800ExtraBold",
+    fontWeight: "800",
+  },
+  heavy: {
+    fontFamily: "Nunito_900Black",
+    fontWeight: "900",
+  },
+};
+
+/** Polices du thème (regular, medium, bold, extraBold, heavy). Pour typer useTheme().fonts. */
+export type AppThemeFonts = typeof appFonts;
+
 export const AppTheme: Theme = {
   ...DefaultTheme,
   dark: false,
   colors: themeColors as Theme["colors"],
-  fonts: {
-    regular: {
-      fontFamily: "Nunito_400Regular",
-      fontWeight: "400",
-    },
-    medium: {
-      fontFamily: "Nunito_500Medium",
-      fontWeight: "500",
-    },
-    bold: {
-      fontFamily: "Nunito_600SemiBold",
-      fontWeight: "600",
-    },
-    heavy: {
-      fontFamily: "Nunito_700Bold",
-      fontWeight: "700",
-    },
-  },
+  fonts: appFonts as Theme["fonts"],
 };

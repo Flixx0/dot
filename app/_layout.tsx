@@ -3,6 +3,8 @@ import {
   Nunito_500Medium,
   Nunito_600SemiBold,
   Nunito_700Bold,
+  Nunito_800ExtraBold,
+  Nunito_900Black,
 } from "@expo-google-fonts/nunito";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ThemeProvider } from "@react-navigation/native";
@@ -12,8 +14,13 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { Platform } from "react-native";
-import "react-native-reanimated";
+import { Platform, Text } from "react-native";
+
+const RNText = Text as typeof Text & { defaultProps?: { style?: object } };
+RNText.defaultProps = {
+  ...RNText.defaultProps,
+  style: { fontFamily: AppTheme.fonts.regular.fontFamily },
+};
 
 export { ErrorBoundary } from "expo-router";
 
@@ -50,6 +57,8 @@ const RootLayout = () => {
     Nunito_500Medium,
     Nunito_600SemiBold,
     Nunito_700Bold,
+    Nunito_800ExtraBold,
+    Nunito_900Black,
   });
 
   useEffect(() => {
