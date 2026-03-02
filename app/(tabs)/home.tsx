@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HorizontalCalendar } from "@/components/HorizontalCalendar";
 import { RemiderRow, Reminder } from "@/components/RemiderRow";
+import { useReminders } from "@/contexts/RemindersContext";
 import type { AppThemeColors } from "@/theme";
 import { useTheme } from "@react-navigation/native";
 import { useCallback, useEffect, useRef } from "react";
@@ -15,67 +16,9 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-const reminderList: Reminder[] = [
-  {
-    id: 1,
-    title: "Reminder 1",
-    description: "Description 1",
-    date: new Date().toISOString(),
-    duration: 30,
-  },
-  {
-    id: 2,
-    title: "Reminder 2",
-    description: "Description 2",
-    date: new Date().toISOString(),
-  },
-  {
-    id: 3,
-    title: "Reminder 3",
-    description: "Description 3",
-    date: new Date().toISOString(),
-  },
-  {
-    id: 4,
-    title: "Reminder 4",
-    description: "Description 4",
-    date: new Date().toISOString(),
-  },
-  {
-    id: 5,
-    title: "Reminder 5",
-    description: "Description 5",
-    date: new Date().toISOString(),
-  },
-
-  {
-    id: 6,
-    title: "Reminder 6",
-    description: "Description 6",
-    date: new Date().toISOString(),
-  },
-  {
-    id: 7,
-    title: "Reminder 7",
-    description: "Description 7",
-    date: new Date().toISOString(),
-  },
-  {
-    id: 8,
-    title: "Reminder 8",
-    description: "Description 8",
-    date: new Date().toISOString(),
-    location: {
-      latitude: 48.8566,
-      longitude: 2.3522,
-      address: "Paris, France",
-      radiusMeters: 100,
-    },
-  },
-];
-
 const HomeScreen = () => {
   const { colors } = useTheme();
+  const { reminders } = useReminders();
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<FlatList<Reminder>>(null);
 
@@ -160,7 +103,7 @@ const HomeScreen = () => {
       </Animated.View>
       <Animated.FlatList<Reminder>
         ref={scrollRef}
-        data={reminderList}
+        data={reminders}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <RemiderRow reminder={item} />}
         onScroll={scrollHandler}

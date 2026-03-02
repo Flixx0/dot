@@ -9,6 +9,7 @@ import {
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ThemeProvider } from "@react-navigation/native";
 
+import { RemindersProvider } from "@/contexts/RemindersContext";
 import { AppTheme } from "@/theme";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -32,20 +33,22 @@ SplashScreen.preventAutoHideAsync();
 
 const RootLayoutNav = () => (
   <ThemeProvider value={AppTheme}>
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="modal"
-        options={{
-          presentation: Platform.OS === "ios" ? "modal" : "formSheet",
-          animation:
-            Platform.OS === "android" ? "slide_from_bottom" : undefined,
-          ...(Platform.OS === "android" && {
-            sheetAllowedDetents: [1],
-          }),
-        }}
-      />
-    </Stack>
+    <RemindersProvider>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="modal"
+          options={{
+            presentation: Platform.OS === "ios" ? "modal" : "formSheet",
+            animation:
+              Platform.OS === "android" ? "slide_from_bottom" : undefined,
+            ...(Platform.OS === "android" && {
+              sheetAllowedDetents: [1],
+            }),
+          }}
+        />
+      </Stack>
+    </RemindersProvider>
   </ThemeProvider>
 );
 
