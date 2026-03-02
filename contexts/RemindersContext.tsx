@@ -1,8 +1,10 @@
 import type { Reminder } from "@/components/RemiderRow";
 import {
   addReminder as addReminderRepo,
+  clearReminders as clearRemindersRepo,
   deleteReminder as deleteReminderRepo,
   getReminders,
+  resetReminders as resetRemindersRepo,
   seedRemindersIfEmpty,
   updateReminder as updateReminderRepo,
 } from "@/lib/reminders";
@@ -23,6 +25,10 @@ type RemindersContextValue = {
     patch: Partial<Omit<Reminder, "id">>
   ) => Reminder | null;
   refreshReminders: () => void;
+  /** Vide tous les rappels. */
+  clearReminders: () => void;
+  /** Réinitialise avec la liste de seed. */
+  resetReminders: () => void;
 };
 
 const RemindersContext = createContext<RemindersContextValue | null>(null);
@@ -59,6 +65,16 @@ export const RemindersProvider = ({
     []
   );
 
+  const clearReminders = useCallback(() => {
+    clearRemindersRepo();
+    setReminders(getReminders());
+  }, []);
+
+  const resetReminders = useCallback(() => {
+    resetRemindersRepo();
+    setReminders(getReminders());
+  }, []);
+
   const value = useMemo<RemindersContextValue>(
     () => ({
       reminders,
@@ -66,8 +82,18 @@ export const RemindersProvider = ({
       deleteReminder,
       updateReminder,
       refreshReminders,
+      clearReminders,
+      resetReminders,
     }),
-    [reminders, addReminder, deleteReminder, updateReminder, refreshReminders]
+    [
+      reminders,
+      addReminder,
+      deleteReminder,
+      updateReminder,
+      refreshReminders,
+      clearReminders,
+      resetReminders,
+    ]
   );
 
   return (

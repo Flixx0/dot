@@ -6,7 +6,8 @@ import { RemiderRow, Reminder } from "@/components/RemiderRow";
 import { useReminders } from "@/contexts/RemindersContext";
 import type { AppThemeColors } from "@/theme";
 import { useTheme } from "@react-navigation/native";
-import { useCallback, useEffect, useRef } from "react";
+import { isSameDay } from "date-fns";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Animated, {
   Easing,
   Extrapolation,
@@ -19,6 +20,9 @@ import Animated, {
 const HomeScreen = () => {
   const { colors } = useTheme();
   const { reminders } = useReminders();
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<FlatList<Reminder>>(null);
 
@@ -97,13 +101,17 @@ const HomeScreen = () => {
         ]}
       >
         <HorizontalCalendar
-          selectedDate={new Date()}
+          selectedDate={selectedDate}
+          onDateSelect={setSelectedDate}
           isHeaderReduced={isHeaderReduced}
         />
       </Animated.View>
       <Animated.FlatList<Reminder>
         ref={scrollRef}
-        data={reminders}
+        data={reminders.filter(
+          (reminder) =>
+            !reminder.date || isSameDay(new Date(reminder.date), selectedDate)
+        )}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <RemiderRow reminder={item} />}
         onScroll={scrollHandler}
