@@ -1,9 +1,10 @@
+import { CheckButton } from "@/components/CheckButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useTheme } from "@react-navigation/native";
 import { format } from "date-fns";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 /** Localisation pour un rappel (géolocalisation / geofencing) */
@@ -26,10 +27,12 @@ export type Reminder = {
   /** Localisation optionnelle : coordonnées + adresse + rayon pour rappel à l’arrivée */
   location?: ReminderLocation;
   recurring?: boolean;
+  completed?: boolean;
 };
 
 export const RemiderRow = ({ reminder }: { reminder: Reminder }) => {
   const { colors } = useTheme();
+  const [isCompleted, setIsCompleted] = useState(reminder.completed);
 
   const timeLabel = useMemo(() => {
     if (reminder.date) {
@@ -75,7 +78,7 @@ export const RemiderRow = ({ reminder }: { reminder: Reminder }) => {
           ) : null}
         </ThemedView>
       </View>
-      <View style={[styles.actions, { borderColor: colors.border }]}></View>
+      <CheckButton completed={reminder.completed || false} />
     </ThemedView>
   );
 };
@@ -117,5 +120,9 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
+  },
+  actionLabel: {
+    fontSize: 20,
+    fontWeight: "600",
   },
 });

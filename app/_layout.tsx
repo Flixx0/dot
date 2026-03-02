@@ -8,6 +8,7 @@ import {
 } from "@expo-google-fonts/nunito";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ThemeProvider } from "@react-navigation/native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { RemindersProvider } from "@/contexts/RemindersContext";
 import { AppTheme } from "@/theme";
@@ -15,7 +16,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { Platform, Text } from "react-native";
+import { Platform, StyleSheet, Text } from "react-native";
 
 const RNText = Text as typeof Text & { defaultProps?: { style?: object } };
 RNText.defaultProps = {
@@ -32,24 +33,26 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 const RootLayoutNav = () => (
-  <ThemeProvider value={AppTheme}>
-    <RemindersProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="modal"
-          options={{
-            presentation: Platform.OS === "ios" ? "modal" : "formSheet",
-            animation:
-              Platform.OS === "android" ? "slide_from_bottom" : undefined,
-            ...(Platform.OS === "android" && {
-              sheetAllowedDetents: [1],
-            }),
-          }}
-        />
-      </Stack>
-    </RemindersProvider>
-  </ThemeProvider>
+  <GestureHandlerRootView style={StyleSheet.absoluteFill}>
+    <ThemeProvider value={AppTheme}>
+      <RemindersProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="modal"
+            options={{
+              presentation: Platform.OS === "ios" ? "modal" : "formSheet",
+              animation:
+                Platform.OS === "android" ? "slide_from_bottom" : undefined,
+              ...(Platform.OS === "android" && {
+                sheetAllowedDetents: [1],
+              }),
+            }}
+          />
+        </Stack>
+      </RemindersProvider>
+    </ThemeProvider>
+  </GestureHandlerRootView>
 );
 
 const RootLayout = () => {
