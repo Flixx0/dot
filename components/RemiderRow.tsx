@@ -1,19 +1,17 @@
 import { CheckButton } from "@/components/CheckButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { withMemo } from "@/helpers/withMemo";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useTheme } from "@react-navigation/native";
 import { format } from "date-fns";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 
-/** Localisation pour un rappel (géolocalisation / geofencing) */
 export type ReminderLocation = {
   latitude: number;
   longitude: number;
-  /** Adresse ou nom du lieu (affichage) */
   address?: string;
-  /** Rayon en mètres pour déclencher le rappel (geofence). Ex: 100 */
   radiusMeters?: number;
 };
 
@@ -21,25 +19,20 @@ export type Reminder = {
   id: number;
   title: string;
   description?: string;
-  /** Optionnel : si absent, rappel déclenché à l'arrivée au lieu (location). */
   date?: string;
   duration?: number; // in minutes
-  /** Localisation optionnelle : coordonnées + adresse + rayon pour rappel à l’arrivée */
   location?: ReminderLocation;
   recurring?: boolean;
   completed?: boolean;
 };
 
-export const RemiderRow = ({ reminder }: { reminder: Reminder }) => {
+export const RemiderRow = withMemo(({ reminder }: { reminder: Reminder }) => {
   const { colors } = useTheme();
-  const [isCompleted, setIsCompleted] = useState(reminder.completed);
-
   const timeLabel = useMemo(() => {
     if (reminder.date) {
       const startDate = new Date(reminder.date);
       const endDate = new Date(reminder.date);
       endDate.setMinutes(endDate.getMinutes() + (reminder.duration || 0));
-
       return (
         <>
           <ThemedText>{format(startDate, "HH:mm")}</ThemedText>
@@ -53,7 +46,6 @@ export const RemiderRow = ({ reminder }: { reminder: Reminder }) => {
     }
     return null;
   }, [reminder.date, reminder.duration, reminder.location]);
-
   return (
     <ThemedView style={styles.container}>
       <View style={styles.content}>
@@ -82,7 +74,7 @@ export const RemiderRow = ({ reminder }: { reminder: Reminder }) => {
       <CheckButton completed={reminder.completed || false} />
     </ThemedView>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

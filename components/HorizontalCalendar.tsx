@@ -2,6 +2,7 @@
  * Horizontal calendar : une semaine à la fois, scroll infini, snap par semaine.
  */
 
+import { withMemo } from "@/helpers/withMemo";
 import { useTheme } from "@react-navigation/native";
 import {
   addDays,
@@ -86,155 +87,160 @@ function getMonthLabel(weekIndex: number): string {
   return format(weekStart, "MMMM yyyy", { locale: fr });
 }
 
-export const HorizontalCalendar = ({
-  selectedDate,
-  onDateSelect,
-  isHeaderReduced,
-}: HorizontalCalendarProps) => {
-  const { colors } = useTheme();
-  const selectedKey = parseSelected(selectedDate);
-  const today = useMemo(() => startOfDay(new Date()), []);
-  const [visibleWeekIndex, setVisibleWeekIndex] = useState(CURRENT_WEEK_INDEX);
-  const [isHeaderReducedState, setIsHeaderReducedState] = useState(false);
+export const HorizontalCalendar = withMemo(
+  ({
+    selectedDate,
+    onDateSelect,
+    isHeaderReduced,
+  }: HorizontalCalendarProps) => {
+    const { colors } = useTheme();
+    const selectedKey = parseSelected(selectedDate);
+    const today = useMemo(() => startOfDay(new Date()), []);
+    const [visibleWeekIndex, setVisibleWeekIndex] =
+      useState(CURRENT_WEEK_INDEX);
+    const [isHeaderReducedState, setIsHeaderReducedState] = useState(false);
 
-  useAnimatedReaction(
-    () => isHeaderReduced?.value ?? false,
-    (reduced) => {
-      runOnJS(setIsHeaderReducedState)(reduced);
-    },
-    [isHeaderReduced]
-  );
+    useAnimatedReaction(
+      () => isHeaderReduced?.value ?? false,
+      (reduced) => {
+        runOnJS(setIsHeaderReducedState)(reduced);
+      },
+      [isHeaderReduced]
+    );
 
-  const onViewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      const first = viewableItems[0];
-      if (first?.index != null) {
-        setVisibleWeekIndex(first.index);
+    const onViewableItemsChanged = useRef(
+      ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+        const first = viewableItems[0];
+        if (first?.index != null) {
+          setVisibleWeekIndex(first.index);
+        }
       }
-    }
-  ).current;
+    ).current;
 
-  const viewabilityConfig = useRef({
-    itemVisiblePercentThreshold: 50,
-  }).current;
+    const viewabilityConfig = useRef({
+      itemVisiblePercentThreshold: 50,
+    }).current;
 
-  const weekIndices = useMemo(
-    () => Array.from({ length: TOTAL_WEEKS }, (_, i) => i),
-    []
-  );
+    const weekIndices = useMemo(
+      () => Array.from({ length: TOTAL_WEEKS }, (_, i) => i),
+      []
+    );
 
-  const renderWeek = useCallback(
-    ({ item }: { item: number }) => {
-      const dates = getWeekDates(item);
-      return (
-        <View style={[styles.weekRow, { width: WEEK_WIDTH }]}>
-          {dates.map((date) => {
-            const key = toDateKey(date);
-            const isSelected = key === selectedKey;
-            const isToday = isSameDay(date, today);
+    const renderWeek = useCallback(
+      ({ item }: { item: number }) => {
+        const dates = getWeekDates(item);
+        return (
+          <View style={[styles.weekRow, { width: WEEK_WIDTH }]}>
+            {dates.map((date) => {
+              const key = toDateKey(date);
+              const isSelected = key === selectedKey;
+              const isToday = isSameDay(date, today);
 
-            return (
-              <TouchableOpacity
-                key={key}
-                onPress={() => onDateSelect?.(date)}
-                activeOpacity={0.7}
-                style={[
-                  styles.dayCard,
-                  {
-                    backgroundColor: isSelected ? colors.card : undefined,
-                    borderColor:
-                      isToday && !isSelected ? colors.card : "transparent",
-                  },
-                ]}
-              >
-                <ThemedText
-                  size={12}
-                  weight="medium"
-                  style={{
-                    color: isSelected ? colors.text : colors.background,
-                  }}
+              return (
+                <TouchableOpacity
+                  key={key}
+                  onPress={() => onDateSelect?.(date)}
+                  activeOpacity={0.7}
+                  style={[
+                    styles.dayCard,
+                    {
+                      backgroundColor: isSelected ? colors.card : undefined,
+                      borderColor:
+                        isToday && !isSelected ? colors.card : "transparent",
+                    },
+                  ]}
                 >
-                  {format(date, "EEE", { locale: fr })}
-                </ThemedText>
-                <ThemedText
-                  size={18}
-                  weight="bold"
-                  style={{
-                    color: isSelected ? colors.text : colors.background,
-                  }}
-                >
-                  {format(date, "d")}
-                </ThemedText>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      );
-    },
-    [colors, selectedKey, today, onDateSelect]
-  );
+                  <ThemedText
+                    size={12}
+                    weight="medium"
+                    style={{
+                      color: isSelected ? colors.text : colors.background,
+                    }}
+                  >
+                    {format(date, "EEE", { locale: fr })}
+                  </ThemedText>
+                  <ThemedText
+                    size={18}
+                    weight="bold"
+                    style={{
+                      color: isSelected ? colors.text : colors.background,
+                    }}
+                  >
+                    {format(date, "d")}
+                  </ThemedText>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        );
+      },
+      [colors, selectedKey, today, onDateSelect]
+    );
 
-  const getItemLayout = useCallback(
-    (_: unknown, index: number) => ({
-      length: WEEK_WIDTH,
-      offset: WEEK_WIDTH * index,
-      index,
-    }),
-    []
-  );
+    const getItemLayout = useCallback(
+      (_: unknown, index: number) => ({
+        length: WEEK_WIDTH,
+        offset: WEEK_WIDTH * index,
+        index,
+      }),
+      []
+    );
 
-  const monthLabel = useMemo(
-    () => getMonthLabel(visibleWeekIndex),
-    [visibleWeekIndex]
-  );
+    const monthLabel = useMemo(
+      () => getMonthLabel(visibleWeekIndex),
+      [visibleWeekIndex]
+    );
 
-  const selectedDateObj =
-    selectedDate == null ? null : toNormalizedDate(selectedDate);
+    const selectedDateObj =
+      selectedDate == null ? null : toNormalizedDate(selectedDate);
 
-  const dayLabel = useMemo(
-    () =>
-      selectedDateObj ? format(selectedDateObj, "EEEE d", { locale: fr }) : "",
-    [selectedDateObj]
-  );
+    const dayLabel = useMemo(
+      () =>
+        selectedDateObj
+          ? format(selectedDateObj, "EEEE d", { locale: fr })
+          : "",
+      [selectedDateObj]
+    );
 
-  return (
-    <View style={styles.wrapper}>
-      <View style={styles.headerRow}>
-        {isHeaderReducedState && dayLabel ? (
+    return (
+      <View style={styles.wrapper}>
+        <View style={styles.headerRow}>
+          {isHeaderReducedState && dayLabel ? (
+            <Animated.Text
+              entering={SlideInLeft.duration(400)}
+              layout={LinearTransition.springify()}
+              style={[styles.dayLabel, { color: colors.background }]}
+            >
+              {dayLabel}
+            </Animated.Text>
+          ) : null}
           <Animated.Text
-            entering={SlideInLeft.duration(400)}
             layout={LinearTransition.springify()}
-            style={[styles.dayLabel, { color: colors.background }]}
+            style={[styles.monthLabel, { color: colors.background }]}
           >
-            {dayLabel}
+            {monthLabel}
           </Animated.Text>
-        ) : null}
-        <Animated.Text
-          layout={LinearTransition.springify()}
-          style={[styles.monthLabel, { color: colors.background }]}
-        >
-          {monthLabel}
-        </Animated.Text>
+        </View>
+        <FlatList
+          data={weekIndices}
+          keyExtractor={(item) => `week-${item}`}
+          renderItem={renderWeek}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={viewabilityConfig}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          snapToInterval={WEEK_WIDTH}
+          snapToAlignment="start"
+          decelerationRate="fast"
+          initialScrollIndex={CURRENT_WEEK_INDEX}
+          getItemLayout={getItemLayout}
+          contentContainerStyle={styles.container}
+        />
       </View>
-      <FlatList
-        data={weekIndices}
-        keyExtractor={(item) => `week-${item}`}
-        renderItem={renderWeek}
-        onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={viewabilityConfig}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled
-        snapToInterval={WEEK_WIDTH}
-        snapToAlignment="start"
-        decelerationRate="fast"
-        initialScrollIndex={CURRENT_WEEK_INDEX}
-        getItemLayout={getItemLayout}
-        contentContainerStyle={styles.container}
-      />
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   wrapper: {

@@ -2,6 +2,7 @@ import {
   type BottomTabBarProps,
   BottomTabBarHeightCallbackContext,
 } from "@react-navigation/bottom-tabs";
+import { withMemo } from "@/helpers/withMemo";
 import { useCallback, useContext } from "react";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -9,7 +10,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColorScheme } from "@/components/useColorScheme";
 import Colors from "@/constants/Colors";
 
-export const FloatingTabBar = (props: Readonly<BottomTabBarProps>) => {
+export const FloatingTabBar = withMemo((props: Readonly<BottomTabBarProps>) => {
   const { state, descriptors, navigation } = props;
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -118,7 +119,7 @@ export const FloatingTabBar = (props: Readonly<BottomTabBarProps>) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   wrapper: {
