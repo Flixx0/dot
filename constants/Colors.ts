@@ -18,6 +18,10 @@ export default {
     tabIconDefault: gray,
     tabIconSelected: orange,
     black,
+    darkGray,
+    lightGray,
+    white,
+    gray,
   },
   dark: {
     text: white,
@@ -26,5 +30,9 @@ export default {
     tabIconDefault: gray,
     tabIconSelected: orange,
     black,
+    darkGray,
+    lightGray,
+    white,
+    gray,
   },
 };

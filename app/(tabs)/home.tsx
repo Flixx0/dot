@@ -1,12 +1,14 @@
 import { FlatList, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { Button } from "@/components/Button";
 import { HorizontalCalendar } from "@/components/HorizontalCalendar";
 import { RemiderRow, Reminder } from "@/components/RemiderRow";
 import { useReminders } from "@/contexts/RemindersContext";
-import type { AppThemeColors } from "@/theme";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useTheme } from "@react-navigation/native";
 import { isSameDay } from "date-fns";
+import { useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Animated, {
   Easing,
@@ -20,7 +22,7 @@ import Animated, {
 const HomeScreen = () => {
   const { colors } = useTheme();
   const { reminders } = useReminders();
-
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const insets = useSafeAreaInsets();
@@ -79,12 +81,7 @@ const HomeScreen = () => {
   );
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: (colors as AppThemeColors).black },
-      ]}
-    >
+    <View style={[styles.container, { backgroundColor: colors.black }]}>
       <Animated.View
         style={[
           {
@@ -123,6 +120,16 @@ const HomeScreen = () => {
           { paddingTop: 200 + insets.top },
         ]}
       />
+      <View style={styles.newButtonContainer}>
+        <Button
+          onPress={() => {
+            router.push("/addModal");
+          }}
+          style={[styles.newButton, { backgroundColor: colors.primary }]}
+        >
+          <FontAwesome6 name="plus" size={24} color={colors.background} />
+        </Button>
+      </View>
     </View>
   );
 };
@@ -142,5 +149,24 @@ const styles = StyleSheet.create({
   },
   item: {
     height: 100,
+  },
+  newButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 100,
+    elevation: 10,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  newButtonContainer: {
+    position: "absolute",
+    bottom: 50,
+    left: 0,
+    right: 0,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingHorizontal: 20,
   },
 });

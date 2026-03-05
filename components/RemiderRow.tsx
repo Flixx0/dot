@@ -64,14 +64,15 @@ export const RemiderRow = ({ reminder }: { reminder: Reminder }) => {
         <ThemedView style={styles.tags}>
           {reminder.location?.address ? (
             <ThemedView
-              style={[styles.tag, { backgroundColor: colors.notification }]}
+              style={styles.tag}
+              backgroundColor={colors.notification}
             >
               <FontAwesome6
                 name="location-dot"
                 size={16}
                 color={colors.background}
               />
-              <ThemedText style={{ color: colors.background }}>
+              <ThemedText color={colors.background}>
                 {reminder.location?.address}
               </ThemedText>
             </ThemedView>

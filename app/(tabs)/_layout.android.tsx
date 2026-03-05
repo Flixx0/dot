@@ -3,13 +3,13 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { ThemeProvider } from "@react-navigation/native";
 
+import { FloatingTabBar } from "@/components/FloatingTabBar";
+import Colors from "@/constants/Colors";
+import { HIDE_TAB_BAR } from "@/constants/Dev";
 import { AppTheme } from "@/theme";
 import { Tabs } from "expo-router";
 import type { ComponentProps } from "react";
 import { useCallback } from "react";
-
-import { FloatingTabBar } from "@/components/FloatingTabBar";
-import Colors from "@/constants/Colors";
 
 const TabBarIcon = (props: {
   name: ComponentProps<typeof FontAwesome>["name"];
@@ -29,7 +29,7 @@ const TabLayoutAndroid = () => {
     <ThemeProvider value={AppTheme}>
       <Tabs
         initialRouteName="home"
-        tabBar={renderTabBar}
+        tabBar={HIDE_TAB_BAR ? () => null : renderTabBar}
         screenOptions={{
           headerShown: false,
           tabBarActiveTintColor: colors.tint,

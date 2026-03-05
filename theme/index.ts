@@ -1,4 +1,3 @@
-import type { Theme } from "@react-navigation/native";
 import { DefaultTheme } from "@react-navigation/native";
 
 import {
@@ -61,9 +60,9 @@ const appFonts = {
 /** Polices du thème (regular, medium, bold, extraBold, heavy). Pour typer useTheme().fonts. */
 export type AppThemeFonts = typeof appFonts;
 
-export const AppTheme: Theme = {
+export const AppTheme: ReactNavigation.Theme = {
   ...DefaultTheme,
   dark: false,
-  colors: themeColors as Theme["colors"],
-  fonts: appFonts as Theme["fonts"],
+  colors: themeColors,
+  fonts: appFonts,
 };

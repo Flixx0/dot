@@ -15,6 +15,8 @@ type FontWeight = "regular" | "medium" | "bold" | "heavy" | "extraBold";
 type ThemeProps = {
   lightColor?: string;
   darkColor?: string;
+  /** Override la couleur du texte (prioritaire sur le thème). */
+  color?: string;
   weight?: FontWeight;
   size?: number;
 };
@@ -26,11 +28,16 @@ export const ThemedText = (props: TextProps) => {
     style,
     lightColor,
     darkColor,
+    color: colorProp,
     weight = "regular",
     size,
     ...otherProps
   } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const themeColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "text"
+  );
+  const color = colorProp ?? themeColor;
   const theme = useTheme();
   const fontFamily =
     theme?.fonts?.[weight as keyof Theme["fonts"]]?.fontFamily ??

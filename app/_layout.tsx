@@ -9,7 +9,10 @@ import {
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ThemeProvider } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
+import { ModalHeaderBackground } from "@/components/ModalHeaderBackground";
+import { ModalHeaderCloseButton } from "@/components/ModalHeaderCloseButton";
 import { RemindersProvider } from "@/contexts/RemindersContext";
 import { AppTheme } from "@/theme";
 import { useFonts } from "expo-font";
@@ -32,26 +35,37 @@ export const unstable_settings = {
 
 SplashScreen.preventAutoHideAsync();
 
+const addModalHeaderRight = () => <ModalHeaderCloseButton />;
+const addModalHeaderBackground = () => <ModalHeaderBackground />;
+
 const RootLayoutNav = () => (
   <GestureHandlerRootView style={StyleSheet.absoluteFill}>
-    <ThemeProvider value={AppTheme}>
-      <RemindersProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="modal"
-            options={{
-              presentation: Platform.OS === "ios" ? "modal" : "formSheet",
-              animation:
-                Platform.OS === "android" ? "slide_from_bottom" : undefined,
-              ...(Platform.OS === "android" && {
-                sheetAllowedDetents: [1],
-              }),
-            }}
-          />
-        </Stack>
-      </RemindersProvider>
-    </ThemeProvider>
+    <KeyboardProvider>
+      <ThemeProvider value={AppTheme}>
+        <RemindersProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="addModal"
+              options={{
+                presentation: Platform.OS === "ios" ? "modal" : "formSheet",
+                animation:
+                  Platform.OS === "android" ? "slide_from_bottom" : undefined,
+                ...(Platform.OS === "android" && {
+                  sheetAllowedDetents: [1],
+                }),
+                headerShown: false,
+                // headerRight: addModalHeaderRight,
+                // headerTitle: "Ajouter un rappel",
+                // headerTransparent: true,
+                // headerBackground: addModalHeaderBackground,
+                // headerTintColor: AppTheme.colors.background,
+              }}
+            />
+          </Stack>
+        </RemindersProvider>
+      </ThemeProvider>
+    </KeyboardProvider>
   </GestureHandlerRootView>
 );
 
