@@ -1,7 +1,3 @@
-/**
- * Horizontal calendar : une semaine à la fois, scroll infini, snap par semaine.
- */
-
 import { withMemo } from "@/helpers/withMemo";
 import { useTheme } from "@react-navigation/native";
 import {
@@ -43,11 +39,8 @@ const WEEK_WIDTH = SCREEN_WIDTH;
 const DAY_GAP = 10;
 
 type HorizontalCalendarProps = {
-  /** Date sélectionnée (timestamp ou string YYYY-MM-DD) */
   selectedDate?: Date | string | number;
-  /** Appelé au clic sur un jour */
   onDateSelect?: (date: Date) => void;
-  /** Header réduit (ex. après scroll) – SharedValue pour usage dans des worklets */
   isHeaderReduced?: SharedValue<boolean>;
 };
 

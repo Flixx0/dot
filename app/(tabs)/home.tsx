@@ -68,7 +68,7 @@ const HomeScreen = () => {
     isHeaderReduced.value = event.contentOffset.y >= 90;
   });
 
-  const scrollEndDragHandler = useCallback(
+  const onScrollAnimationEnd = useCallback(
     (event: { nativeEvent: { contentOffset: { y: number } } }) => {
       const y = event.nativeEvent.contentOffset.y;
       if (y >= 90 / 2 && y > 0 && y <= 90) {
@@ -113,7 +113,7 @@ const HomeScreen = () => {
         renderItem={({ item }) => <RemiderRow reminder={item} />}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
-        onScrollEndDrag={scrollEndDragHandler}
+        onMomentumScrollEnd={onScrollAnimationEnd}
         style={styles.list}
         contentContainerStyle={[
           styles.listContent,

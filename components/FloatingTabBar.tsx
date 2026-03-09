@@ -1,8 +1,8 @@
+import { withMemo } from "@/helpers/withMemo";
 import {
   type BottomTabBarProps,
   BottomTabBarHeightCallbackContext,
 } from "@react-navigation/bottom-tabs";
-import { withMemo } from "@/helpers/withMemo";
 import { useCallback, useContext } from "react";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

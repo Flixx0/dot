@@ -1,9 +1,15 @@
+import type { AddReminderFormValues } from "@/app/addModal";
 import { withMemo } from "@/helpers/withMemo";
 import { useTheme } from "@react-navigation/native";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, TextInput, View } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
-import Animated, { withDelay, withTiming } from "react-native-reanimated";
+import Animated, {
+  FadeOut,
+  withDelay,
+  withTiming,
+} from "react-native-reanimated";
 
 const DELAY_PER_LETTER_MS = 20;
 const AUTO_FOCUS_DELAY_MS = 600;
@@ -11,14 +17,12 @@ const headerText = "De quoi tu veux te souvenir ?";
 
 export const AddReminderTitleView = withMemo(() => {
   const { colors, fonts } = useTheme();
-  const inputRef = useRef<TextInput>(null);
+  const { control, setFocus } = useFormContext<AddReminderFormValues>();
 
   useEffect(() => {
-    const t = setTimeout(() => {
-      inputRef.current?.focus();
-    }, AUTO_FOCUS_DELAY_MS);
+    const t = setTimeout(() => setFocus("title"), AUTO_FOCUS_DELAY_MS);
     return () => clearTimeout(t);
-  }, []);
+  }, [setFocus]);
 
   const customEntering = useCallback(
     (index: number, rotation: string = "45deg") =>
@@ -50,7 +54,10 @@ export const AddReminderTitleView = withMemo(() => {
 
   return (
     <KeyboardAvoidingView style={styles.keyboardAvoid} behavior="padding">
-      <View style={styles.contentContainer}>
+      <Animated.View
+        exiting={FadeOut.duration(100)}
+        style={styles.contentContainer}
+      >
         <View style={styles.headerContainer}>
           {headerText.split("").map((letter, index) => (
             <Animated.Text
@@ -75,14 +82,23 @@ export const AddReminderTitleView = withMemo(() => {
             { backgroundColor: colors.background },
           ]}
         >
-          <TextInput
-            ref={inputRef}
-            style={[styles.input, { color: colors.text }]}
-            placeholder="Titre du rappel"
-            placeholderTextColor={colors.gray}
+          <Controller
+            control={control}
+            name="title"
+            render={({ field: { onChange, onBlur, value, ref } }) => (
+              <TextInput
+                ref={ref}
+                style={[styles.input, { color: colors.text }]}
+                placeholder="Entre un titre pour ton rappel"
+                placeholderTextColor={colors.gray}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+              />
+            )}
           />
         </Animated.View>
-      </View>
+      </Animated.View>
     </KeyboardAvoidingView>
   );
 });

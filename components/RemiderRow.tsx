@@ -71,7 +71,7 @@ export const RemiderRow = withMemo(({ reminder }: { reminder: Reminder }) => {
           ) : null}
         </ThemedView>
       </View>
-      <CheckButton completed={reminder.completed || false} />
+      <CheckButton reminder={reminder} />
     </ThemedView>
   );
 });

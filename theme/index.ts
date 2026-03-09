@@ -10,11 +10,6 @@ import {
   white,
 } from "@/constants/Colors";
 
-/**
- * Thème app : mêmes noms que les constantes (orange, offWhite, etc.).
- * Les clés primary, background, etc. restent pour React Navigation.
- * Police : Nunito (regular, medium, semibold, bold).
- */
 const themeColors = {
   orange,
   offWhite,
@@ -31,7 +26,6 @@ const themeColors = {
   notification: orange,
 };
 
-/** Couleurs du thème (noms des constantes + clés RN). Pour typer useTheme().colors. */
 export type AppThemeColors = typeof themeColors;
 
 const appFonts = {
@@ -57,7 +51,6 @@ const appFonts = {
   },
 };
 
-/** Polices du thème (regular, medium, bold, extraBold, heavy). Pour typer useTheme().fonts. */
 export type AppThemeFonts = typeof appFonts;
 
 export const AppTheme: ReactNavigation.Theme = {

@@ -3,7 +3,6 @@ import { storage } from "@/lib/storage";
 
 const REMINDERS_KEY = "reminders";
 
-/** Date à jourOffset jours, à heure:minute. */
 function at(dayOffset: number, hour: number, minute: number): string {
   const d = new Date();
   d.setDate(d.getDate() + dayOffset);
@@ -11,7 +10,6 @@ function at(dayOffset: number, hour: number, minute: number): string {
   return d.toISOString();
 }
 
-/** Rappels initiaux au premier lancement (liste vide sinon). */
 const INITIAL_REMINDERS: Reminder[] = [
   {
     id: 1,

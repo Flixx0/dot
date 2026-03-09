@@ -1,7 +1,3 @@
-/**
- * Text with theme color and font (Nunito).
- */
-
 import { Theme, useTheme } from "@react-navigation/native";
 import {
   Text as DefaultText,
@@ -15,7 +11,6 @@ type FontWeight = "regular" | "medium" | "bold" | "heavy" | "extraBold";
 type ThemeProps = {
   lightColor?: string;
   darkColor?: string;
-  /** Override la couleur du texte (prioritaire sur le thème). */
   color?: string;
   weight?: FontWeight;
   size?: number;

@@ -1,7 +1,3 @@
-/**
- * Palette de couleurs (noms lisibles).
- * Utilisée par le thème, useThemeColor et la tab bar.
- */
 export const orange = "#d9563a";
 export const offWhite = "#F8F8F8";
 export const white = "#FFFFFF";

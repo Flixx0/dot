@@ -1,7 +1,3 @@
-/**
- * Bouton avec Gesture Handler et animation scale au press (Reanimated).
- */
-
 import { withMemo } from "@/helpers/withMemo";
 import { type StyleProp, type ViewStyle } from "react-native";
 import Animated, {

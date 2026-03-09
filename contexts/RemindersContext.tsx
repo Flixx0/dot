@@ -25,9 +25,7 @@ type RemindersContextValue = {
     patch: Partial<Omit<Reminder, "id">>
   ) => Reminder | null;
   refreshReminders: () => void;
-  /** Vide tous les rappels. */
   clearReminders: () => void;
-  /** Réinitialise avec la liste de seed. */
   resetReminders: () => void;
 };
 
